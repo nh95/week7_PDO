@@ -65,10 +65,22 @@ class collection {
     $recordsSet =  $statement->fetchAll();
     return $recordsSet;
     }
+
+     static public function getCount(){
+     $db = dbConn::getConnection();
+     $tableName = get_called_class();
+     $sql = 'SELECT count(*)  FROM ' . $tableName . ' where id < 6';
+     $statement = $db->prepare($sql);
+     $statement->execute();
+     $count = $statement->fetchColumn();
+     echo "Count is ". $count;
+     }
 }
 
 class accounts extends collection {
     protected static $modelName = 'account';
+
+
     }
 
 class account {
@@ -84,9 +96,6 @@ public $password;
 
 class DisplayResult{
 
-public static function getRowCount($records){
- echo 'The count is : ' .sizeof($records);
-}
 
 public static function displayTable($records){
 $html = "<html><body><table border = 1>";
@@ -111,7 +120,7 @@ echo $html;
 }
 
 $records = accounts::findAll();
-DisplayResult::getRowCount($records);
+accounts::getCount();
 DisplayResult::displayTable($records);
 
 ?>
